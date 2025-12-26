@@ -37,6 +37,7 @@ char 		**splitstring(char *str);
 void		create_maparr(t_map *map);
 
 void		check_size(t_map *map);
+void		check_wall(t_map *map);
 
 void		error_filename();
 void		error_openfile();

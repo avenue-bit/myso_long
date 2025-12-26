@@ -26,7 +26,7 @@ void	error_malloc()
 void	error_size(t_map *map)
 {
 	write(2, "\033[1;31mERROR Mapsize incorrect\033[0m\n", 36);
-	write(2, "\033[0;34mAre all lines in the file equally long?\n\033[0m", 52);
+	write(2, "\033[0;34mLines not equally long / Map too small\n\033[0m", 51);
 	freeallarr(map->arr, map->y);
 	exit(1);
 }

@@ -151,7 +151,7 @@ void	check_size(t_map *map)
 		}
 	map->x = max;
 	map->y = y;
-	if (check)
+	if (check || y < 3 || max < 3)
 		error_size(map);
 }
 
@@ -192,6 +192,7 @@ void	checkmap(t_map *map)
 		error_malloc();
 	check_size(map);
 	check_wall(map);
+	
 }
 
 void	map_initializer(t_map *map, char **av)
