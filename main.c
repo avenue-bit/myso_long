@@ -70,7 +70,8 @@ char **createstringarr(char *str, char **r, int nw)
 			while (str[i] && str[i] != '\n')
 				r[j][k++] = str[i++];
 			r[j++][k] = '\0';
-			i++;
+			if (str[i] == '\n')
+				i++;
 		}
 		r[j] = NULL;
 		return (r);
@@ -85,7 +86,7 @@ char **splitstring(char *str)
 
 	nw = 0;
 	i = 0;
-	while (*str && str[i])
+	while (str && str[i])
 		{
 		if (str[i] != '\n' && (i == 0 || str[i - 1] == '\n'))
 			nw++;
@@ -125,10 +126,14 @@ void	create_maparr(t_map *map)
 	map->maparr = splitstring(mapstring);
 	free(mapstring);
 }
-	// int i = 0;
-	// while (map->maparr[i])
-	// 	i++;
-	// return (freeallarr(map->maparr, i));
+// if (map->maparr)
+// {
+// 	int i = 0;
+// 	while (map->maparr[i])
+// 		i++;
+// 	return (freeallarr(map->maparr, i));
+// }
+
 
 void	checkmap(t_map *map)
 {
