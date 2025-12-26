@@ -12,8 +12,6 @@
 typedef struct s_map
 {
 	char	*filename;
-	char	*line;
-	char	*file;
 	char	**maparr;
 	char	**mapcopy;
 	int		moves;

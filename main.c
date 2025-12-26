@@ -15,14 +15,16 @@ void	check_filename(t_map *map)
 		error_filename();
 }
 
-char	*addtomapstring(char *s1, char *s2, int i, int j)
+char	*addtomapstring(char *s1, char *s2)
 {
 	char	*joinstr;
+	int i;
+	int j;
 
+	i = 0;
+	j = 0;
 	if (!s1)
-		return (addtomapstring("", s2, 0, 0));
-	if (!s2)
-		return (addtomapstring(s1, "", 0, 0));
+		return (addtomapstring("", s2));
 	while (s1[i])
 		i++;
 	while (s2[j])
@@ -41,10 +43,64 @@ char	*addtomapstring(char *s1, char *s2, int i, int j)
 	return (joinstr);
 }
 
+void	freeallarr(char **r, int j)
+{
+	while (j > 0)
+		free(r[--j]);
+	free(r);
+}
+
+char **createstringarr(char *str, char **r, int nw)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = 0;
+	while (j < nw)
+		{
+			k = 0;
+			while (str[i + k] && str[i + k] != '\n')
+				k++;
+			r[j] = malloc(sizeof(char) * (k + 1));
+			if (!r[j])
+				return (freeallarr(r, j), NULL);
+			k = 0;
+			while (str[i] && str[i] != '\n')
+				r[j][k++] = str[i++];
+			r[j++][k] = '\0';
+			i++;
+		}
+		r[j] = NULL;
+		return (r);
+}
+
+char **splitstring(char *str)
+{
+	char **r;
+	int nw;
+	int i;
+	int j;
+
+	nw = 0;
+	i = 0;
+	while (*str && str[i])
+		{
+		if (str[i] != '\n' && (i == 0 || str[i - 1] == '\n'))
+			nw++;
+		i++;
+		}
+	r = malloc(sizeof(char *) * (nw + 1));
+	if (!r)
+		return (NULL);
+	return (createstringarr(str, r, nw));
+}
+
 void	create_maparr(t_map *map)
 {
 	char	*mapstring;
-	char	*mapstring2;
+	char	*buffer;
 	char	*line;
 	int		fd;
 
@@ -57,20 +113,22 @@ void	create_maparr(t_map *map)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		mapstring2 = addtomapstring(mapstring, line, 0, 0);
+		buffer = addtomapstring(mapstring, line);
 		if (mapstring)
 			free(mapstring);
 		free(line);
-		if (!mapstring2)
-			{
-				close (fd);
-				//freenexit(map);
-			}
-		mapstring = mapstring2;
+		if (!buffer)
+			break ;
+		mapstring = buffer;
 	}
-	printf("%s", mapstring);
 	close(fd);
+	map->maparr = splitstring(mapstring);
+	free(mapstring);
 }
+	// int i = 0;
+	// while (map->maparr[i])
+	// 	i++;
+	// return (freeallarr(map->maparr, i));
 
 void	checkmap(t_map *map)
 {
@@ -111,7 +169,7 @@ int	main(int ac, char **av)
 	// 	printf("%s", rstr);
 	// 	free(rstr);
 	// }
-	printf("here");
+	//printf("here");
 	return (0);
 	// https://github.com/josephcheel/42-So_long/blob/master/Mandatory/src/check_valid_path.c
 }
