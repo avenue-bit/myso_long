@@ -123,23 +123,42 @@ void	create_maparr(t_map *map)
 		mapstring = buffer;
 	}
 	close(fd);
-	map->maparr = splitstring(mapstring);
+	map->arr = splitstring(mapstring);
 	free(mapstring);
 }
-// if (map->maparr)
-// {
-// 	int i = 0;
-// 	while (map->maparr[i])
-// 		i++;
-// 	return (freeallarr(map->maparr, i));
-// }
 
+void	check_size(t_map *map)
+{
+	int y;
+	int x; 
+	int max;
+	int i;
+
+	y = 0;
+	x = 0;
+	max = 0;
+	if (!map->arr || !map->arr[0])
+		error_malloc();
+	while (map->arr[0][max])
+		max++;
+	while(map->arr[y])
+		{
+			x = 0;
+			while (map->arr[y][x])
+				x++;
+			if (max != x)
+				error_size(map);
+			y++;
+		}
+	map->x = max;
+	map->y = y;
+}
 
 void	checkmap(t_map *map)
 {
 	check_filename(map);
 	create_maparr(map);
-	// check_parameter(map);
+	check_size(map);
 }
 
 void	map_initializer(t_map *map, char **av)
@@ -166,15 +185,9 @@ int	main(int ac, char **av)
 
 	map_initializer(&map, av);
 	checkmap(&map);
-	// while (1)
-	// {
-	// 	char *rstr = get_next_line(fd);
-	// 	if (! rstr)
-	// 		break ;
-	// 	printf("%s", rstr);
-	// 	free(rstr);
-	// }
-	//printf("here");
+
+	if (map.arr)
+		return (freeallarr(map.arr, map.y), 0);
 	return (0);
 	// https://github.com/josephcheel/42-So_long/blob/master/Mandatory/src/check_valid_path.c
 }

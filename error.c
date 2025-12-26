@@ -16,3 +16,17 @@ void	error_openfile()
 		58);
 	exit(1);
 }
+
+void	error_malloc()
+{
+	write(2, "\033[1;31mERROR Malloc failed\033[0m\n", 32);
+	exit(1);
+}
+
+void	error_size(t_map *map)
+{
+	write(2, "\033[1;31mERROR Mapsize incorrect\033[0m\n", 36);
+	write(2, "\033[0;34mAre all lines in the file equally long?\n\033[0m", 52);
+	freeallarr(map->arr, map->y);
+	exit(1);
+}

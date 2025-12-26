@@ -12,8 +12,7 @@
 typedef struct s_map
 {
 	char	*filename;
-	char	**maparr;
-	char	**mapcopy;
+	char	**arr;
 	int		moves;
 	int		y;
 	int		x;
@@ -31,7 +30,17 @@ void		check_filename(t_map *map);
 void		checkmap(t_map *map);
 void		map_initializer(t_map *map, char **av);
 
+char		*addtomapstring(char *s1, char *s2);
+void		freeallarr(char **r, int j);
+char 		**createstringarr(char *str, char **r, int nw);
+char 		**splitstring(char *str);
+void		create_maparr(t_map *map);
+
+void		check_size(t_map *map);
+
 void		error_filename();
 void		error_openfile();
+void		error_malloc();
+void		error_size(t_map *map);
 
 #endif
