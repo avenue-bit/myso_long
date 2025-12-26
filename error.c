@@ -30,3 +30,9 @@ void	error_size(t_map *map)
 	freeallarr(map->arr, map->y);
 	exit(1);
 }
+void	error_wall(t_map *map)
+{
+	write(2, "\033[1;31mERROR Map does not contain a surrounding wall\033[0m\n", 58);
+	freeallarr(map->arr, map->y);
+	exit(1);
+}

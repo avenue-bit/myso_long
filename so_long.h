@@ -42,5 +42,6 @@ void		error_filename();
 void		error_openfile();
 void		error_malloc();
 void		error_size(t_map *map);
+void		error_wall(t_map *map);
 
 #endif

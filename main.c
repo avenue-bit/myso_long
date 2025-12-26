@@ -132,13 +132,12 @@ void	check_size(t_map *map)
 	int y;
 	int x; 
 	int max;
-	int i;
+	int check;
 
 	y = 0;
 	x = 0;
 	max = 0;
-	if (!map->arr || !map->arr[0])
-		error_malloc();
+	check = 0;
 	while (map->arr[0][max])
 		max++;
 	while(map->arr[y])
@@ -147,18 +146,52 @@ void	check_size(t_map *map)
 			while (map->arr[y][x])
 				x++;
 			if (max != x)
-				error_size(map);
+				check = 1;
 			y++;
 		}
 	map->x = max;
 	map->y = y;
+	if (check)
+		error_size(map);
+}
+
+void	check_wall(t_map *map)
+{
+	int cy;
+	int cx;
+
+	cy = 1;
+	cx = 0;
+	while (map->arr[0][cx])
+		if (map->arr[0][cx++] != '1')	
+			error_wall(map);
+	while (map->arr[cy])
+		{
+			cx = 0;
+			while (map->arr[cy][cx])
+				{
+					if (map->arr[cy][cx] != '1' && cx == 0)
+						error_wall(map);
+					cx++;
+				}
+			if (map->arr[cy][cx - 1] != '1')
+				error_wall(map);
+			cy++;
+		}
+	cx = 0;
+	while (map->arr[cy - 1][cx])
+		if (map->arr[cy - 1][cx++] != '1')
+			error_wall(map);
 }
 
 void	checkmap(t_map *map)
 {
 	check_filename(map);
 	create_maparr(map);
+	if (!map->arr || !map->arr[0])
+		error_malloc();
 	check_size(map);
+	check_wall(map);
 }
 
 void	map_initializer(t_map *map, char **av)
