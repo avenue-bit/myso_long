@@ -184,15 +184,100 @@ void	check_wall(t_map *map)
 			error_wall(map);
 }
 
+void	check_params(t_map *map)
+{
+	int cy;
+	int cx; 
+
+	cy = 0;
+	while (map->arr[cy])
+	{
+		cx = 0;
+		while (map->arr[cy][cx])
+			{
+				if (map->arr[cy][cx] == 'C')
+					map->c += 1;
+				else if (map->arr[cy][cx] == 'E')
+					map->e += 1;
+				else if (map->arr[cy][cx] == 'P')
+					map->p += 1;
+				else if (map->arr[cy][cx] == '0' || map->arr[cy][cx] == '1')
+					;
+				else
+					error_params(map);
+				cx++;
+			}
+		cy++;
+	}
+	if (map->p != 1 || map->e < 1 || map->c < 1)
+		error_params(map);
+}
+
+void 	findplayer(t_map *map)
+{
+	int x;
+	int y;
+
+	y = 0;
+	while (map->arr[y])
+	{
+		x = 0;
+		while (map->arr[y][x])
+		{
+			if (map->arr[y][x] == 'P')
+			{
+				map->player.x = x;
+				map->player.y = y;
+				return ;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void	check_paths(t_map cpmap, int y, int x, t_map *map)
+{
+	if (cpmap.arr[y][x] == 'C')
+		{
+			map->c_check -= 1;
+			cpmap.arr[y][x] = '1';
+		}
+	else if (cpmap.arr[y][x] == 'E')
+		{
+			map->e_check -= 1;
+			cpmap.arr[y][x] = '1';
+		}
+	else if (cpmap.arr[y][x] == '0' || cpmap.arr[y][x] == 'P')
+			cpmap.arr[y][x] = '1';
+	else
+		return ;
+	check_paths(cpmap, y, x + 1, map);
+	check_paths(cpmap, y, x - 1, map);
+	check_paths(cpmap, y + 1, x, map);
+	check_paths(cpmap, y - 1, x, map);
+}
+
 void	checkmap(t_map *map)
 {
+	int y;
+	int x;
+
+	y = 0;
+	x = 0;
 	check_filename(map);
 	create_maparr(map);
 	if (!map->arr || !map->arr[0])
 		error_malloc();
 	check_size(map);
 	check_wall(map);
-	
+	check_params(map);
+	findplayer(map);
+	map->c_check = map->c;
+	map->e_check = map->e;
+	check_paths(*map, map->player.y, map->player.x, map);
+	if (map->c_check != 0 || map->e_check >= map->e)
+		error_path(map);
 }
 
 void	map_initializer(t_map *map, char **av)

@@ -36,3 +36,19 @@ void	error_wall(t_map *map)
 	freeallarr(map->arr, map->y);
 	exit(1);
 }
+
+void error_params(t_map *map)
+{
+	write(2, "\033[1;31mERROR Map parameters incorrect\033[0m\n", 43);
+	write(2, "\033[0;34mMap must contain '1' and '0' + 1 'P', min 1 'C' and 'E'\n\033[0m", 68);
+	freeallarr(map->arr, map->y);
+	exit(1);
+}
+
+void error_path(t_map *map)
+{
+	write(2, "\033[1;31mERROR Invalid path\033[0m\n", 31);
+	write(2, "\033[0;34mCollectable(s) or Exit cannot be reached\n\033[0m", 53);
+	freeallarr(map->arr, map->y);
+	exit(1);
+}
