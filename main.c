@@ -18,8 +18,8 @@ void	check_filename(t_map *map)
 char	*addtomapstring(char *s1, char *s2)
 {
 	char	*joinstr;
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -50,48 +50,48 @@ void	freeallarr(char **r, int j)
 	free(r);
 }
 
-char **createstringarr(char *str, char **r, int nw)
+char	**createstringarr(char *str, char **r, int nw)
 {
-	int i;
-	int j;
-	int k;
+	int	i;
+	int	j;
+	int	k;
 
 	i = 0;
 	j = 0;
 	while (j < nw)
-		{
-			k = 0;
-			while (str[i + k] && str[i + k] != '\n')
-				k++;
-			r[j] = malloc(sizeof(char) * (k + 1));
-			if (!r[j])
-				return (freeallarr(r, j), NULL);
-			k = 0;
-			while (str[i] && str[i] != '\n')
-				r[j][k++] = str[i++];
-			r[j++][k] = '\0';
-			if (str[i] == '\n')
-				i++;
-		}
-		r[j] = NULL;
-		return (r);
+	{
+		k = 0;
+		while (str[i + k] && str[i + k] != '\n')
+			k++;
+		r[j] = malloc(sizeof(char) * (k + 1));
+		if (!r[j])
+			return (freeallarr(r, j), NULL);
+		k = 0;
+		while (str[i] && str[i] != '\n')
+			r[j][k++] = str[i++];
+		r[j++][k] = '\0';
+		if (str[i] == '\n')
+			i++;
+	}
+	r[j] = NULL;
+	return (r);
 }
 
-char **splitstring(char *str)
+char	**splitstring(char *str)
 {
-	char **r;
-	int nw;
-	int i;
-	int j;
+	char	**r;
+	int		nw;
+	int		i;
+	int		j;
 
 	nw = 0;
 	i = 0;
 	while (str && str[i])
-		{
+	{
 		if (str[i] != '\n' && (i == 0 || str[i - 1] == '\n'))
 			nw++;
 		i++;
-		}
+	}
 	r = malloc(sizeof(char *) * (nw + 1));
 	if (!r)
 		return (NULL);
@@ -129,10 +129,10 @@ void	create_maparr(t_map *map)
 
 void	check_size(t_map *map)
 {
-	int y;
-	int x; 
-	int max;
-	int check;
+	int	y;
+	int	x;
+	int	max;
+	int	check;
 
 	y = 0;
 	x = 0;
@@ -140,15 +140,15 @@ void	check_size(t_map *map)
 	check = 0;
 	while (map->arr[0][max])
 		max++;
-	while(map->arr[y])
-		{
-			x = 0;
-			while (map->arr[y][x])
-				x++;
-			if (max != x)
-				check = 1;
-			y++;
-		}
+	while (map->arr[y])
+	{
+		x = 0;
+		while (map->arr[y][x])
+			x++;
+		if (max != x)
+			check = 1;
+		y++;
+	}
 	map->x = max;
 	map->y = y;
 	if (check || y < 3 || max < 3)
@@ -157,27 +157,27 @@ void	check_size(t_map *map)
 
 void	check_wall(t_map *map)
 {
-	int cy;
-	int cx;
+	int	cy;
+	int	cx;
 
 	cy = 1;
 	cx = 0;
 	while (map->arr[0][cx])
-		if (map->arr[0][cx++] != '1')	
+		if (map->arr[0][cx++] != '1')
 			error_wall(map);
 	while (map->arr[cy])
+	{
+		cx = 0;
+		while (map->arr[cy][cx])
 		{
-			cx = 0;
-			while (map->arr[cy][cx])
-				{
-					if (map->arr[cy][cx] != '1' && cx == 0)
-						error_wall(map);
-					cx++;
-				}
-			if (map->arr[cy][cx - 1] != '1')
+			if (map->arr[cy][cx] != '1' && cx == 0)
 				error_wall(map);
-			cy++;
+			cx++;
 		}
+		if (map->arr[cy][cx - 1] != '1')
+			error_wall(map);
+		cy++;
+	}
 	cx = 0;
 	while (map->arr[cy - 1][cx])
 		if (map->arr[cy - 1][cx++] != '1')
@@ -186,37 +186,65 @@ void	check_wall(t_map *map)
 
 void	check_params(t_map *map)
 {
-	int cy;
-	int cx; 
+	int	cy;
+	int	cx;
 
 	cy = 0;
 	while (map->arr[cy])
 	{
 		cx = 0;
 		while (map->arr[cy][cx])
-			{
-				if (map->arr[cy][cx] == 'C')
-					map->c += 1;
-				else if (map->arr[cy][cx] == 'E')
-					map->e += 1;
-				else if (map->arr[cy][cx] == 'P')
-					map->p += 1;
-				else if (map->arr[cy][cx] == '0' || map->arr[cy][cx] == '1')
-					;
-				else
-					error_params(map);
-				cx++;
-			}
+		{
+			if (map->arr[cy][cx] == 'C')
+				map->c += 1;
+			else if (map->arr[cy][cx] == 'E')
+				map->e += 1;
+			else if (map->arr[cy][cx] == 'P')
+				map->p += 1;
+			else if (map->arr[cy][cx] == '0' || map->arr[cy][cx] == '1')
+				;
+			else
+				error_params(map);
+			cx++;
+		}
 		cy++;
 	}
 	if (map->p != 1 || map->e < 1 || map->c < 1)
 		error_params(map);
 }
 
-void 	findplayer(t_map *map)
+char	**duplicate_strarr(char **arr, int x)
 {
-	int x;
-	int y;
+	char	**newarr;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	newarr = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!newarr)
+		return (NULL);
+	i = 0;
+	while (arr[i])
+	{
+		newarr[i] = (char *)malloc(sizeof(char) * (x + 1));
+		if (!newarr[i])
+			return (freeallarr(newarr, i), NULL);
+		j = -1;
+		while (arr[i][++j])
+			newarr[i][j] = arr[i][j];
+		newarr[i][j] = '\0';
+		i++;
+	}
+	newarr[i] = NULL;
+	return (newarr);
+}
+
+void	findplayer(t_map *map)
+{
+	int	x;
+	int	y;
 
 	y = 0;
 	while (map->arr[y])
@@ -236,32 +264,33 @@ void 	findplayer(t_map *map)
 	}
 }
 
-void	check_paths(t_map cpmap, int y, int x, t_map *map)
+void	check_paths(char **cparr, int y, int x, t_map *map)
 {
-	if (cpmap.arr[y][x] == 'C')
-		{
-			map->c_check -= 1;
-			cpmap.arr[y][x] = '1';
-		}
-	else if (cpmap.arr[y][x] == 'E')
-		{
-			map->e_check -= 1;
-			cpmap.arr[y][x] = '1';
-		}
-	else if (cpmap.arr[y][x] == '0' || cpmap.arr[y][x] == 'P')
-			cpmap.arr[y][x] = '1';
-	else
+	if (cparr[y][x] == 'C')
+	{
+		map->c_check -= 1;
+		cparr[y][x] = '1';
+	}
+	else if (cparr[y][x] == 'E')
+	{
+		map->e_check -= 1;
+		cparr[y][x] = '1';
+	}
+	else if (cparr[y][x] == '0' || cparr[y][x] == 'P')
+		cparr[y][x] = '1';
+	else if (cparr[y][x] == '1')
 		return ;
-	check_paths(cpmap, y, x + 1, map);
-	check_paths(cpmap, y, x - 1, map);
-	check_paths(cpmap, y + 1, x, map);
-	check_paths(cpmap, y - 1, x, map);
+	check_paths(cparr, y, x + 1, map);
+	check_paths(cparr, y, x - 1, map);
+	check_paths(cparr, y + 1, x, map);
+	check_paths(cparr, y - 1, x, map);
 }
 
 void	checkmap(t_map *map)
 {
-	int y;
-	int x;
+	int		y;
+	int		x;
+	char	**cparr;
 
 	y = 0;
 	x = 0;
@@ -275,7 +304,11 @@ void	checkmap(t_map *map)
 	findplayer(map);
 	map->c_check = map->c;
 	map->e_check = map->e;
-	check_paths(*map, map->player.y, map->player.x, map);
+	cparr = duplicate_strarr(map->arr, map->x);
+	if (!cparr)
+		error_malloc_free(map);
+	check_paths(cparr, map->player.y, map->player.x, map);
+	freeallarr(cparr, map->y);
 	if (map->c_check != 0 || map->e_check >= map->e)
 		error_path(map);
 }
@@ -284,7 +317,6 @@ void	map_initializer(t_map *map, char **av)
 {
 	map->filename = av[1];
 	map->moves = 0;
-	map->y = 0;
 	map->e = 0;
 	map->c = 0;
 	map->p = 0;
