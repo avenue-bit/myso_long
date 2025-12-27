@@ -8,8 +8,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		error_file();
 
-	map_initializer(&map, av);
-	checkmap(&map);
+	checkmap(&map, av);
 
 	if (map.arr)
 		return (freeallarr(map.arr, map.y), 0);

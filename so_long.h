@@ -33,8 +33,8 @@ typedef struct s_map
 
 char			*get_next_line(int fd);
 
-char			*addtomapstring(char *s1, char *s2);
 void			freeallarr(char **r, int j);
+char			*addtomapstring(char *s1, char *s2);
 char			**createstringarr(char *str, char **r, int nw);
 char			**splitstring(char *str);
 void			create_maparr(t_map *map);
@@ -47,7 +47,7 @@ void			check_paths(char **cparr, int y, int x, t_map *map);
 
 void			map_initializer(t_map *map, char **av);
 char			**duplicate_strarr(char **arr, int x);
-void			checkmap(t_map *map);
+void			checkmap(t_map *map, char **av);
 
 void			error_file();
 void			error_filename(void);

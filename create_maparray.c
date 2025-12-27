@@ -1,6 +1,13 @@
 
 #include "so_long.h"
 
+void	freeallarr(char **r, int j)
+{
+	while (j > 0)
+		free(r[--j]);
+	free(r);
+}
+
 char	*addtomapstring(char *s1, char *s2)
 {
 	char	*joinstr;
@@ -27,13 +34,6 @@ char	*addtomapstring(char *s1, char *s2)
 		joinstr[j++] = s2[i++];
 	joinstr[j] = '\0';
 	return (joinstr);
-}
-
-void	freeallarr(char **r, int j)
-{
-	while (j > 0)
-		free(r[--j]);
-	free(r);
 }
 
 char	**createstringarr(char *str, char **r, int nw)

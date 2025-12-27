@@ -62,7 +62,7 @@ void	findplayer(t_map *map)
 	}
 }
 
-void	checkmap(t_map *map)
+void	checkmap(t_map *map, char **av)
 {
 	int		y;
 	int		x;
@@ -70,6 +70,7 @@ void	checkmap(t_map *map)
 
 	y = 0;
 	x = 0;
+    map_initializer(map, av);
 	check_filename(map);
 	create_maparr(map);
 	if (!map->arr || !map->arr[0])
